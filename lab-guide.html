@@ -1,0 +1,1990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Now Assist &amp; AI Agents Lab Guide — Zurich Release</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ========== RESET & BASE ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #041E2B;
+  color: #D4D9E0;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* ========== LAYOUT ========== */
+.page-wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ========== SIDEBAR / TOC ========== */
+.sidebar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 280px;
+  min-width: 280px;
+  height: 100vh;
+  background: rgba(3, 45, 66, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid rgba(99, 223, 78, 0.12);
+  overflow-y: auto;
+  padding: 1.5rem 0;
+  z-index: 100;
+  transition: transform 0.3s ease;
+}
+.sidebar-header {
+  padding: 0 1.25rem 1.25rem;
+  border-bottom: 1px solid rgba(99, 223, 78, 0.1);
+  margin-bottom: 1rem;
+}
+.sidebar-header .logo-text {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #63DF4E;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+.sidebar-header .doc-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+}
+.toc-list { list-style: none; padding: 0 0.75rem; }
+.toc-list li { margin-bottom: 2px; }
+.toc-list a {
+  display: block;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.78rem;
+  color: #8A95A5;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  line-height: 1.35;
+}
+.toc-list a:hover, .toc-list a.active {
+  color: #63DF4E;
+  background: rgba(99, 223, 78, 0.08);
+}
+.toc-list a.active { font-weight: 600; }
+.toc-list .toc-sub {
+  padding-left: 1rem;
+}
+
+/* Mobile toggle */
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 200;
+  background: rgba(3, 45, 66, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99, 223, 78, 0.25);
+  color: #63DF4E;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+  flex: 1;
+  min-width: 0;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2.5rem 2.5rem 6rem;
+}
+
+/* ========== HERO ========== */
+.hero {
+  background: linear-gradient(135deg, rgba(3, 45, 66, 0.7), rgba(4, 30, 43, 0.9));
+  border: 1px solid rgba(99, 223, 78, 0.15);
+  border-radius: 16px;
+  padding: 2.5rem;
+  margin-bottom: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(99, 223, 78, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #63DF4E;
+  margin-bottom: 0.75rem;
+}
+.hero h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.15;
+  margin-bottom: 0.5rem;
+}
+.hero .subtitle {
+  font-size: 1rem;
+  color: #8A95A5;
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+}
+.hero-meta {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.25rem;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(99, 223, 78, 0.1);
+  color: #63DF4E;
+  border: 1px solid rgba(99, 223, 78, 0.2);
+}
+.badge.blue {
+  background: rgba(56, 152, 236, 0.1);
+  color: #3898EC;
+  border-color: rgba(56, 152, 236, 0.2);
+}
+.badge.neutral {
+  background: rgba(138, 149, 165, 0.12);
+  color: #D4D9E0;
+  border-color: rgba(138, 149, 165, 0.2);
+}
+
+/* ========== SECTION DIVIDERS ========== */
+.section {
+  margin-bottom: 3rem;
+  padding-top: 1rem;
+}
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(99, 223, 78, 0.25), rgba(99, 223, 78, 0.02));
+  margin: 3rem 0;
+}
+
+/* ========== HEADINGS ========== */
+h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #63DF4E;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+h2 .anchor-link {
+  font-size: 0.9rem;
+  color: rgba(99, 223, 78, 0.3);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+h2:hover .anchor-link { opacity: 1; }
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #D4D9E0;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ========== PARAGRAPHS & TEXT ========== */
+p { margin-bottom: 1rem; }
+strong { color: #fff; font-weight: 600; }
+a { color: #63DF4E; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ========== GLASS CARD ========== */
+.card {
+  background: rgba(3, 45, 66, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(99, 223, 78, 0.1);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ========== TABLES ========== */
+.table-wrapper {
+  background: rgba(3, 45, 66, 0.4);
+  border: 1px solid rgba(99, 223, 78, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 1.25rem;
+}
+.table-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.table-wrapper th {
+  background: rgba(99, 223, 78, 0.1);
+  color: #63DF4E;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(99, 223, 78, 0.15);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.table-wrapper td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: top;
+}
+.table-wrapper tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.015);
+}
+.table-wrapper tr:last-child td { border-bottom: none; }
+
+/* ========== CODE BLOCKS ========== */
+.code-block {
+  position: relative;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(99, 223, 78, 0.12);
+  border-radius: 12px;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: rgba(99, 223, 78, 0.05);
+  border-bottom: 1px solid rgba(99, 223, 78, 0.08);
+}
+.code-block-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #8A95A5;
+}
+.copy-btn {
+  background: rgba(99, 223, 78, 0.1);
+  border: 1px solid rgba(99, 223, 78, 0.2);
+  color: #63DF4E;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.copy-btn:hover {
+  background: rgba(99, 223, 78, 0.2);
+}
+.code-block pre {
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #D4D9E0;
+}
+code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85em;
+  background: rgba(99, 223, 78, 0.08);
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  color: #63DF4E;
+}
+
+/* ========== CALLOUTS ========== */
+.callout {
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 1.25rem;
+  border-left: 3px solid;
+}
+.callout-label {
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.35rem;
+  display: block;
+}
+.callout.tip {
+  background: rgba(99, 223, 78, 0.06);
+  border-color: #63DF4E;
+}
+.callout.tip .callout-label { color: #63DF4E; }
+
+.callout.note {
+  background: rgba(56, 152, 236, 0.06);
+  border-color: #3898EC;
+}
+.callout.note .callout-label { color: #3898EC; }
+
+.callout.challenge {
+  background: rgba(245, 166, 35, 0.06);
+  border-color: #F5A623;
+}
+.callout.challenge .callout-label { color: #F5A623; }
+
+.callout.key-takeaway {
+  background: rgba(155, 89, 255, 0.06);
+  border-color: #9B59FF;
+}
+.callout.key-takeaway .callout-label { color: #9B59FF; }
+
+.callout.design-decision {
+  background: rgba(99, 223, 78, 0.04);
+  border-color: rgba(99, 223, 78, 0.4);
+}
+.callout.design-decision .callout-label { color: #63DF4E; }
+
+/* ========== NUMBERED STEPS ========== */
+.steps { counter-reset: step-counter; list-style: none; padding: 0; margin-bottom: 1.5rem; position: relative; }
+.steps::before {
+  content: '';
+  position: absolute;
+  left: 17px;
+  top: 30px;
+  bottom: 10px;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(99, 223, 78, 0.3), rgba(99, 223, 78, 0.05));
+}
+.steps > li {
+  counter-increment: step-counter;
+  position: relative;
+  padding-left: 52px;
+  margin-bottom: 1.25rem;
+  min-height: 36px;
+}
+.steps > li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(99, 223, 78, 0.12);
+  border: 2px solid rgba(99, 223, 78, 0.3);
+  color: #63DF4E;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.steps > li > p:first-child { padding-top: 0.4rem; }
+
+/* Sub-steps */
+.sub-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+.sub-steps li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.35rem;
+  font-size: 0.88rem;
+}
+.sub-steps li::before {
+  content: '';
+  position: absolute;
+  left: 0.25rem;
+  top: 0.55rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(99, 223, 78, 0.4);
+}
+
+/* ========== CHAT BUBBLE / TERMINAL OUTPUT ========== */
+.terminal-output {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(99, 223, 78, 0.15);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+  position: relative;
+}
+.terminal-output::before {
+  content: 'Agent Output';
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #63DF4E;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(99, 223, 78, 0.1);
+}
+.terminal-output p { margin-bottom: 0.6rem; }
+.terminal-output ol { padding-left: 1.25rem; margin-bottom: 0.6rem; }
+.terminal-output li { margin-bottom: 0.4rem; }
+
+/* ========== CHECKLIST ========== */
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  position: relative;
+  padding: 0.6rem 0 0.6rem 2.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.88rem;
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid rgba(99, 223, 78, 0.35);
+  background: rgba(99, 223, 78, 0.05);
+}
+
+/* ========== BULLET LIST ========== */
+.bullet-list { list-style: none; padding: 0; margin-bottom: 1rem; }
+.bullet-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 0.4rem;
+}
+.bullet-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #63DF4E;
+}
+
+/* ========== BACK TO TOP ========== */
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(3, 45, 66, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99, 223, 78, 0.25);
+  color: #63DF4E;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+.back-to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.back-to-top:hover {
+  background: rgba(99, 223, 78, 0.15);
+}
+
+/* ========== PROMPT BLOCK ========== */
+.prompt-block {
+  background: rgba(99, 223, 78, 0.04);
+  border: 1px solid rgba(99, 223, 78, 0.15);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-style: italic;
+  color: #D4D9E0;
+  font-size: 0.9rem;
+  line-height: 1.65;
+  position: relative;
+}
+.prompt-block::before {
+  content: 'Prompt';
+  display: block;
+  font-style: normal;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #63DF4E;
+  margin-bottom: 0.5rem;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+  .sidebar {
+    position: fixed;
+    transform: translateX(-100%);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-toggle { display: flex; }
+  .main-content { padding: 2rem 1.25rem 5rem; }
+  .hero { padding: 1.75rem; }
+  .hero h1 { font-size: 1.5rem; }
+  .table-wrapper { overflow-x: auto; }
+  .table-wrapper table { min-width: 500px; }
+}
+
+/* ========== PRINT ========== */
+@media print {
+  body { background: #fff; color: #222; }
+  .sidebar, .sidebar-toggle, .back-to-top, .copy-btn { display: none !important; }
+  .main-content { max-width: 100%; padding: 0; margin: 0; }
+  .hero, .card, .table-wrapper, .code-block, .callout, .terminal-output {
+    border: 1px solid #ccc;
+    background: #f9f9f9 !important;
+    backdrop-filter: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  h2, .hero-eyebrow, .callout.tip .callout-label, .badge { color: #032D42 !important; }
+  h2 .anchor-link { display: none; }
+  a { color: #032D42; text-decoration: underline; }
+  .section-divider { background: #ccc; }
+  .steps::before { background: #ccc; }
+  .steps > li::before { border-color: #032D42; color: #032D42; background: #e8f5e9; }
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile sidebar toggle -->
+<button class="sidebar-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')" aria-label="Toggle navigation">&#9776;</button>
+
+<div class="page-wrapper">
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="logo-text">ServiceNow Now Assist</span>
+    <span class="doc-title">AI Agents Lab Guide<br>Zurich Release</span>
+  </div>
+  <ul class="toc-list">
+    <li><a href="#welcome">Welcome &amp; Objectives</a></li>
+    <li><a href="#lab-prep">Lab Preparation</a></li>
+    <li><a href="#section-1">Section 1: Gen AI on Day 1</a></li>
+    <li><a href="#section-2-intro">Section 2: Building Agents</a></li>
+    <li class="toc-sub"><a href="#section-2-1">2.1 Knowledge Gap Analyzer Agent</a></li>
+    <li class="toc-sub"><a href="#section-2-2">2.2 Build an Agent with Tools</a></li>
+    <li class="toc-sub"><a href="#section-2-3">2.3 Wrap Agent in a Use Case</a></li>
+    <li class="toc-sub"><a href="#section-2-4">2.4 (Optional) Outage Check Agent</a></li>
+    <li><a href="#section-3-intro">Section 3: Agent Persona</a></li>
+    <li class="toc-sub"><a href="#section-3-1">3.1 Incident Summarization</a></li>
+    <li class="toc-sub"><a href="#section-3-2">3.2 Resolution Note Generation</a></li>
+    <li class="toc-sub"><a href="#section-3-3">3.3 Knowledge Creation</a></li>
+    <li class="toc-sub"><a href="#section-3-4">3.4 Change Summarization</a></li>
+    <li class="toc-sub"><a href="#section-3-5">3.5 CI for Change Request</a></li>
+    <li><a href="#section-4-intro">Section 4: Developer Persona</a></li>
+    <li class="toc-sub"><a href="#section-4-1">4.1 Flow from Image</a></li>
+    <li class="toc-sub"><a href="#section-4-2">4.2 Flow from Text</a></li>
+    <li class="toc-sub"><a href="#section-4-3">4.3 Code Generation</a></li>
+    <li><a href="#section-7">Section 7: Skill Kit (Optional)</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+    <li class="toc-sub"><a href="#appendix-a1">A1: Sample Prompts</a></li>
+    <li class="toc-sub"><a href="#appendix-a2">A2: Agent Ideas</a></li>
+    <li class="toc-sub"><a href="#appendix-a3">A3: AI Search Setup</a></li>
+    <li class="toc-sub"><a href="#appendix-a4">A4: Application Scope</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN -->
+<main class="main-content">
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-eyebrow">American Express Digital Workplace &mdash; ServiceNow AI Agents Workshop</div>
+  <h1>Now Assist &amp; AI Agents Lab Guide</h1>
+  <p class="subtitle">Hands-on lab guide covering Now Assist GenAI skills, AI Agent Studio, and the developer persona. Zurich Release.</p>
+  <div class="hero-meta">
+    <span class="badge">5 Sections</span>
+    <span class="badge blue">Zurich Release</span>
+    <span class="badge neutral">ITSM Pro+</span>
+    <span class="badge neutral">AI Agent Studio</span>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<!-- WELCOME & OBJECTIVES -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="welcome">
+  <h2>Welcome &amp; Objectives <a href="#welcome" class="anchor-link">#</a></h2>
+
+  <p>You will achieve the following objectives:</p>
+  <ul class="bullet-list">
+    <li>Enable Now Assist and start using GenAI on Day 1!</li>
+    <li>Review the Now Assist and Agents turnkey configuration.</li>
+  </ul>
+
+  <p>Learn how Now Assist and ServiceNow Agents improve the work world of...</p>
+
+  <h3>The Agent</h3>
+  <ul class="bullet-list">
+    <li>Summarize Incidents and Change Requests</li>
+    <li>Generate Incident resolution notes</li>
+    <li>Generate Knowledge articles</li>
+    <li>Use Agents via the Now Assist Panel</li>
+    <li>Analyze monitoring alerts</li>
+  </ul>
+
+  <h3>The Developer</h3>
+  <ul class="bullet-list">
+    <li>Generate playbook (from an image) and flows from prompts</li>
+    <li>Generate scripts in Glide Script, ServiceNow's scripting language</li>
+    <li>Create a custom skill using the Now Assist Skill Kit</li>
+  </ul>
+
+  <div class="callout tip">
+    <span class="callout-label">Tips</span>
+    <ul class="bullet-list" style="margin-bottom:0;">
+      <li>You should copy values or text between the quotation marks, excluding the quotation marks.</li>
+      <li>Be especially sensitive about the quotation marks when a list of values or texts is provided.</li>
+      <li>Make sure you mark the whole value, not missing a character at the beginning or the end.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- LAB PREPARATION -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="lab-prep">
+  <h2>Lab Preparation <a href="#lab-prep" class="anchor-link">#</a></h2>
+
+  <p>Before starting the lab, let's make sure your lab instance is ready.</p>
+  <p>Log into the instance with the "Magic link" as Admin.</p>
+  <p>Navigate to <strong>AI Search &gt; AI Search Status</strong></p>
+
+  <img src="https://content.gitbook.com/content/DllbrTVbjzMeBclO7Dxo/blobs/pnZfgK6VuczTBVVUOvIs/Unknown%20image" alt="AI Search Navigation" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+
+  <p>You should see a green check mark, like this:</p>
+
+  <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F4WDL4cZRB7Q4KTj5mhSX%2Faisgreen.png?alt=media&token=f24a84a4-6649-468b-a3d8-5e3cd6dbcfa1" alt="AI Search Status Green Check" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+
+  <div class="callout note">
+    <span class="callout-label">Note</span>
+    If AI Search is NOT active, please click to go to the <strong>Appendix Section A3: AI Search Set-Up</strong> and follow the steps to repair your instance. Otherwise, skip straight to the lab.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: GEN AI ON DAY 1 -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-1">
+  <h2>Section 1: Gen AI on Day 1 <a href="#section-1" class="anchor-link">#</a></h2>
+
+  <p>This section covers the Now Assist Admin Console and getting generative AI capabilities up and running on day one. Your facilitator will walk through the Admin Console overview, licensing, and the turnkey configuration that comes with Now Assist.</p>
+
+  <div class="callout tip">
+    <span class="callout-label">Tip</span>
+    The Now Assist Admin Console provides a single pane of glass for enabling, configuring, and monitoring all Now Assist capabilities across your instance. Explore the console to see which skills are active and how they are configured.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2: BUILDING AGENTS (INTRO) -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-2-intro">
+  <h2>Section 2: Building Agents and Use Cases <a href="#section-2-intro" class="anchor-link">#</a></h2>
+
+  <p>This section contains four learning modules focused on agent development:</p>
+  <ol class="steps">
+    <li><strong>Section 2.1</strong> — Build the Knowledge Gap Analyzer Agent</li>
+    <li><strong>Section 2.2</strong> — Build an Agent with Tools</li>
+    <li><strong>Section 2.3</strong> — Wrap your Agent in a Use Case</li>
+    <li><strong>Section 2.4 (Optional)</strong> — Build an AI Agent that checks outages in similar incidents</li>
+  </ol>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2.1: KNOWLEDGE GAP ANALYZER AGENT -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-2-1">
+  <h2>Section 2.1: Build the Knowledge Gap Analyzer Agent <a href="#section-2-1" class="anchor-link">#</a></h2>
+
+  <div class="callout note">
+    <span class="callout-label">Note</span>
+    In the following lab, we will talk through prompting many times. To learn more about prompting in ServiceNow, visit our community and our Product Manager's <a href="https://www.servicenow.com/community/now-assist-articles/now-assist-ai-agents-prompting-guide/ta-p/3386242" target="_blank" rel="noopener">excellent guide on prompting</a>.
+  </div>
+
+  <h3>Step 1: Create the Agent</h3>
+
+  <ol class="steps">
+    <li><p>Open AI Agent Studio (<strong>All &gt; AI Agent Studio &gt; Overview</strong>)</p></li>
+
+    <li><p>Locate the section titled <strong>"Recent use cases and AI agents activity".</strong> Select the <strong>AI Agents tab,</strong> then click <strong>"Add". Choose "Chat"</strong></p></li>
+
+    <li><p>A configuration page for "New AI agent" will open. In the Define the specialty area, click on <strong>'Generate details.'</strong></p></li>
+
+    <li>
+      <p>Copy and paste the following into the dialog:</p>
+      <div class="prompt-block">I want an AI agent that analyzes knowledge base coverage gaps. This agent retrieves recent incidents from the incident table to understand what issues people are experiencing, then searches the knowledge base to see what documentation already exists. It compares the two datasets to identify incident categories and topics that have no corresponding knowledge articles. It presents a prioritized gap report showing: the topic, how many incidents it represents, and a recommended article title. Results are sorted by incident volume so teams know which articles to write first. The agent uses a professional, analytical tone and formats output as a clean numbered list. It ends with a summary of total incidents analyzed, gaps found, and estimated deflection impact.</div>
+    </li>
+
+    <li>
+      <p>Click on <strong>"Generate."</strong> Scroll through the results and see how Now Assist has filled in the AI Agent role, list of steps, and Agent name.</p>
+      <ul class="bullet-list">
+        <li>You may see a <strong>"Possible duplications found"</strong> dialog pop up. Click <strong>"Ignore and continue."</strong></li>
+      </ul>
+    </li>
+  </ol>
+
+  <div class="callout tip">
+    <span class="callout-label">Tip</span>
+    If you do not see the entry field for "AI Agent Role", you may be in the wrong section! Check the upper left corner of the screen and confirm that you are in the "New AI Agent" setup.
+  </div>
+
+  <ol class="steps" style="counter-reset: step-counter 5;">
+    <li>
+      <p>Review the generated <strong>Instructions</strong>. Don't worry about perfecting them yet &mdash; we'll come back and refine these after we add the tools. For now, accept what Now Assist generated.</p>
+    </li>
+
+    <li><p>Click <strong>"Save and continue"</strong></p></li>
+  </ol>
+
+  <h3>Step 2: Add the Tools</h3>
+  <p>Now we give the agent its capabilities. Both tools use the built-in Record operation &mdash; no custom development, no Flow Designer work required.</p>
+
+  <ol class="steps" style="counter-reset: step-counter 7;">
+    <li>
+      <p>Click <strong>Add tool</strong> and configure the first tool:</p>
+      <ul class="bullet-list">
+        <li>Select <strong>Record operation</strong></li>
+        <li><strong>Name:</strong> "Get Recent Incidents"</li>
+        <li><strong>Description:</strong> "Retrieve recent incident records to analyze trending issues and identify categories lacking knowledge base coverage."</li>
+        <li><strong>Table:</strong> Search for and select <strong>"Incident"</strong></li>
+        <li><strong>Select operation:</strong> <strong>"Look up records"</strong></li>
+        <li><strong>Conditions:</strong> click <strong>"+ Add condition set"</strong>, then set <strong>Active</strong> &mdash; <strong>is</strong> &mdash; <strong>true</strong></li>
+        <li><strong>Max records returned:</strong> change from 5 to <strong>50</strong></li>
+        <li><strong>Returned fields:</strong> select <strong>short_description</strong>, <strong>category</strong>, <strong>subcategory</strong>, <strong>priority</strong></li>
+        <li><strong>Order By:</strong> select <strong>Created</strong> (sys_created_on)</li>
+        <li><strong>Sort Type:</strong> select <strong>Descending</strong></li>
+        <li><strong>Execution mode:</strong> Autonomous</li>
+        <li><strong>Display output:</strong> Yes</li>
+      </ul>
+      <p style="margin-top:0.75rem;">Under advanced settings:</p>
+      <ul class="bullet-list">
+        <li><strong>Output transformation strategy:</strong> Concise</li>
+        <li><strong>'Generate messages'</strong> letting Now Assist fill in the responses, or enter:
+          <ul class="bullet-list" style="margin-top:0.25rem;">
+            <li>Thinking: "Retrieving recent incidents..."</li>
+            <li>Completion: "Incident data retrieved."</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+    <li><p>Click <strong>'Add'</strong></p></li>
+
+    <li>
+      <p>Click <strong>Add tool</strong> again and configure the second tool:</p>
+      <ul class="bullet-list">
+        <li>Select <strong>Record operation</strong></li>
+        <li><strong>Name:</strong> "Search Knowledge Base"</li>
+        <li><strong>Description:</strong> "Retrieve published knowledge articles to determine what documentation already exists. Use this to compare against incident topics and identify gaps."</li>
+        <li><strong>Table:</strong> Search for and select <strong>"Knowledge"</strong> (kb_knowledge)</li>
+        <li><strong>Select operation:</strong> <strong>"Look up records"</strong></li>
+        <li><strong>Conditions:</strong> click <strong>"+ Add condition set"</strong>, then set <strong>Workflow state</strong> &mdash; <strong>is</strong> &mdash; <strong>Published</strong></li>
+        <li><strong>Max records returned:</strong> <strong>50</strong></li>
+        <li><strong>Returned fields:</strong> select <strong>short_description</strong>, <strong>topic</strong></li>
+        <li><strong>Execution mode:</strong> Autonomous</li>
+        <li><strong>Display output:</strong> Yes</li>
+      </ul>
+      <p style="margin-top:0.75rem;">Under advanced settings:</p>
+      <ul class="bullet-list">
+        <li><strong>Output transformation strategy:</strong> Concise</li>
+        <li><strong>'Generate messages'</strong> letting Now Assist fill in the responses, or enter:
+          <ul class="bullet-list" style="margin-top:0.25rem;">
+            <li>Thinking: "Searching knowledge base..."</li>
+            <li>Completion: "Knowledge base search complete."</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+    <li><p>Click <strong>Add</strong></p></li>
+
+    <li>
+      <p>Your tools list should now show two tools:</p>
+      <ul class="bullet-list">
+        <li><strong>Get Recent Incidents</strong> (Record operation &mdash; Look up records) - Autonomous</li>
+        <li><strong>Search Knowledge Base</strong> (Record operation &mdash; Look up records) - Autonomous</li>
+      </ul>
+    </li>
+
+    <li><p>Click <strong>Save and Continue</strong></p></li>
+  </ol>
+
+  <h3>Step 3: Refine the Instructions</h3>
+  <p>Now that our tools exist, we need to go back and make sure the agent's instructions tell it exactly how to use them. This is the most important step &mdash; <strong>the instructions are what make the agent smart.</strong></p>
+
+  <ol class="steps" style="counter-reset: step-counter 13;">
+    <li><p>Navigate back to the agent's configuration. Click on the agent name or use the breadcrumb to return to the <strong>Define the specialty</strong> section.</p></li>
+
+    <li>
+      <p>Replace the generated Instructions with the following. Notice how each step references the tools <strong>by the exact names we just created</strong>:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Instructions</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>1. When asked to analyze knowledge gaps, use the "Get Recent Incidents" tool to retrieve recent incident data. This returns incident short descriptions and categories.
+2. Use the "Search Knowledge Base" tool to retrieve published knowledge articles. Review the returned articles and compare them against the incident topics you identified.
+3. Compare the incident topics against the knowledge articles returned. Identify incident categories or topics where NO relevant knowledge article exists.
+4. Present your findings as a prioritized list. For each gap, include: the topic/category, how many incidents relate to it, and a recommended article title. Sort by incident count (highest first).
+5. End with a brief summary: total incidents analyzed, number of gaps found, and estimated incident deflection if the top 3 articles were created.</pre>
+      </div>
+    </li>
+  </ol>
+
+  <div class="callout challenge">
+    <span class="callout-label">Key Takeaway</span>
+    <p>This is how prompt engineering works with AI Agents. The tools give the agent <em>capabilities</em>, but the instructions tell it <em>when and how</em> to use them. Without instructions that reference tool names, the agent won't know it has tools to call. This refine-after-building pattern is how you'll iterate on agents in the real world too.</p>
+  </div>
+
+  <ol class="steps" style="counter-reset: step-counter 15;">
+    <li><p>Click <strong>Save</strong></p></li>
+  </ol>
+
+  <h3>Step 4: Configure Access, Channels, and Activation</h3>
+
+  <ol class="steps" style="counter-reset: step-counter 16;">
+    <li>
+      <p>In Define user access:</p>
+      <ul class="sub-steps">
+        <li>Select <strong>"Any Authenticated user"</strong> from the User access drop-down</li>
+        <li>Select the <strong>Dynamic user</strong>, search and select <strong>'itil'</strong> and <strong>"admin"</strong> from the approved roles</li>
+        <li>Click <strong>"Save and continue"</strong></li>
+      </ul>
+    </li>
+
+    <li><p>At Add triggers, click <strong>"Save and continue"</strong> (no triggers for this lab).</p></li>
+
+    <li><p>At Select channels and status, leave the defaults (Now Assist Panel). Click <strong>"Save and continue"</strong>.</p></li>
+  </ol>
+
+  <div class="callout note">
+    <span class="callout-label">Note</span>
+    In a production environment, you could expose agents to Virtual Agent, Employee Center, or third parties via MCP. For this lab, we keep it simple.
+  </div>
+
+  <ol class="steps" style="counter-reset: step-counter 19;">
+    <li><p>In Communicate this AI agent's process to users, click on <strong>"Generate messages"</strong> letting Now Assist create thinking and completion messages for you.</p></li>
+
+    <li><p>On the Activation status area, make sure the Status toggle is set to <strong>"On"</strong></p></li>
+
+    <li><p>Click <strong>Save and Test</strong></p></li>
+  </ol>
+
+  <h3>Step 5: Test the Agent</h3>
+
+  <ul class="bullet-list">
+    <li>In the Task box, enter <strong>"Analyze our knowledge base for gaps based on recent incidents"</strong> and click Continue to Test Chat response.</li>
+    <li>The agent should now:
+      <ul class="sub-steps" style="margin-top:0.5rem;">
+        <li>Call the "Get Recent Incidents" tool to pull recent incident data</li>
+        <li>Call the "Search Knowledge Base" tool to retrieve published knowledge articles</li>
+        <li>Compare the results and identify gaps</li>
+        <li>Present a numbered list of gaps sorted by incident volume</li>
+      </ul>
+    </li>
+    <li>Expand and read through the AI agent's <strong>decision log</strong> to see each step:
+      <ul class="bullet-list" style="margin-top:0.25rem;">
+        <li><strong>Thought:</strong> The agent's reasoning about what to do next</li>
+        <li><strong>Action:</strong> Which tool it decided to call</li>
+        <li><strong>Action Inputs:</strong> The parameters it passed to the tool</li>
+        <li>Watch how the agent decides <em>which</em> keywords to search for in the KB based on what it found in the incidents</li>
+        <li>See how it synthesizes the two data sources into a gap analysis</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="callout note">
+    <span class="callout-label">What to expect</span>
+    The agent will identify 3-7 topic areas where incidents exist but knowledge articles do not. The exact topics will depend on your instance's demo data, but common gaps include network connectivity issues, VPN configuration, email/Outlook problems, and hardware-specific troubleshooting.
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-label">Tip</span>
+    If the agent gives a generic answer instead of instance-specific data, the issue is usually in the <strong>Instructions</strong> or the <strong>tool descriptions</strong>. Go back and verify both reference the tool names exactly as configured.
+  </div>
+
+  <div class="callout challenge">
+    <span class="callout-label">Dive Deeper / Challenge</span>
+    <p>How could this agent be expanded beyond the lab? What if it could automatically create draft KB articles for each gap? What if it ran on a weekly schedule and emailed the Knowledge Manager a gap report?</p>
+    <p style="margin-top:0.5rem;"><strong>Challenge:</strong> What other data sources would make this analysis more powerful? (Hint: incident resolution notes, customer satisfaction scores, or self-service search terms with zero results.)</p>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2.2: BUILD AGENT WITH TOOLS -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-2-2">
+  <h2>Section 2.2: Build an Agent with Tools <a href="#section-2-2" class="anchor-link">#</a></h2>
+
+  <ol class="steps">
+    <li>Open AI Agent Studio (<strong>All &gt; AI Agent Studio &gt; Overview</strong>)</li>
+    <li>Click the <strong>Create and Manage</strong> module.</li>
+    <li>Click on the <strong>AI Agent</strong> tab, then click <strong>Add</strong>.</li>
+    <li>
+      <p>Copy and paste the following prompt into the Generate details dialog:</p>
+      <div class="prompt-block">I want an agent that can recommend solutions for all incidents. This agent identifies and recommends a resolution for an open and active incident being worked on by the Service Desk helping end users resolve their IT issues. It provides simple to follow steps to help users remediate their problem using a professional and business friendly tone. First it will need to get the details, any current similar incidents open, using the description search the KB for relevant articles to help. If there are no relevant articles, use your IT knowledge to come up with a recommended resolution based on the short description of the incident. Add resolution steps, along with any relevant similar incidents and knowledge articles, to the Additional Comments section of the incident record. When adding a comment, make sure to include a qualifier that states the comment was added by an AI Agent. Your output message to the user should be formatted to be easy to read with new line characters in a list format. Also provide your reasoning for recommending these steps.</div>
+      <img src="https://content.gitbook.com/content/DllbrTVbjzMeBclO7Dxo/blobs/bej4ZC6MHQ7FEInGTK3U/Unknown%20image" alt="Agent generation" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+      <img src="https://content.gitbook.com/content/DllbrTVbjzMeBclO7Dxo/blobs/JP8GFo6bhQKvzEWnmdMG/Unknown%20image" alt="Agent details filled in" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+      <ul class="bullet-list">
+        <li>Now scroll through the results, and see how Now Assist has filled in the AI Agent role, list of steps, and Agent name.</li>
+        <li>You will see a <strong>"Possible duplications found"</strong> dialog pop up, click <strong>"Ignore and continue"</strong>.</li>
+      </ul>
+    </li>
+    <li>
+      <p>Click on <strong>"Recommended Tools"</strong>, a list of Suggested tools will appear, let's select the relevant tools in this order by clicking on the "+" next to each tool type. Then Hit <strong>'Save and Continue'</strong>.</p>
+      <img src="https://content.gitbook.com/content/DllbrTVbjzMeBclO7Dxo/blobs/SuJ1IrihyMMEFONrjEmP/Unknown%20image" alt="Recommended Tools" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+      <p>We are missing one tool, so let's create the following tools by selecting the <strong>Add tool</strong> option from the AI agent definition:</p>
+    </li>
+    <li>
+      <p>Create the next tool by selecting <strong>Add tool</strong>:</p>
+      <ul class="sub-steps">
+        <li>Select <strong>Flow Action</strong></li>
+        <li>Select <strong>"Add Worknote"</strong></li>
+        <li><strong>Name:</strong> "Update additional comments in incident record"</li>
+        <li><strong>Description:</strong> "Update the additional comments field in the incident record belonging to the incident that triggered this AI agent"</li>
+        <li><strong>Execution mode:</strong> Autonomous</li>
+        <li><strong>Display output:</strong> Yes</li>
+        <li>Under advance — <strong>Output transformation strategy:</strong> Concise</li>
+        <li><strong>'Generate messages'</strong> letting Now Assist fill in the responses, please feel free to customize those you prefer</li>
+      </ul>
+    </li>
+    <li>Click <strong>'Add'</strong>.</li>
+    <li>
+      <p>Create the next tool by selecting Add tool again:</p>
+      <ul class="sub-steps">
+        <li>Select <strong>Flow Action</strong></li>
+        <li><strong>Name:</strong> "Get Similar Incident Records"</li>
+        <li><strong>Description:</strong> "Get similar incident records. The table is the 'incident' table"</li>
+        <li><strong>Select flow action:</strong> "Get Similar Incident Records"</li>
+        <li><strong>Execution mode:</strong> Autonomous</li>
+        <li><strong>Display output:</strong> Yes</li>
+        <li>Under advance — <strong>Output transformation strategy:</strong> Concise</li>
+        <li><strong>'Generate messages'</strong> letting Now Assist fill in the responses, please feel free to customize those you prefer</li>
+      </ul>
+    </li>
+    <li>Click <strong>Add</strong>.</li>
+    <li>Click <strong>Save and Continue</strong>.</li>
+    <li>
+      <p>In Define user access, click <strong>"Save and continue"</strong> on the following two steps:</p>
+      <ul class="sub-steps">
+        <li>Select <strong>"Any Authenticated user"</strong> from the User access drop-down</li>
+        <li>Select the <strong>Dynamic user</strong>, search and select <strong>'itil'</strong> and <strong>"admin"</strong> from the approved roles</li>
+      </ul>
+    </li>
+    <li>Next, at the Add triggers, click <strong>"Save and continue"</strong>.</li>
+    <li>Next, at the Select channels and status, see you can enable Agents to communicate via the Now Assist for Virtual Agent (via Employee center, or Service Portal), but for this example, we will NOT change the selection.</li>
+    <li>In the Communicate, this AI agent's process to users, click on <strong>"Generate messages"</strong> letting Now Assist create them for you, when the agent is 'thinking' and when it has completed its task, adjust as you prefer.</li>
+    <li>On the Activation status area, make sure the Status toggle is set to <strong>"On"</strong>.</li>
+    <li>Click <strong>Save and Test</strong>.</li>
+  </ol>
+
+  <h3>Now let's test the agent!</h3>
+  <ul class="bullet-list">
+    <li>In the Task box, enter <strong>"Help me resolve INC0010248"</strong> and click Continue to Test Chat response.</li>
+  </ul>
+
+  <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FFYX8ovexCrXfZBtd0DkY%2Fimage.png?alt=media&token=8c002cf6-787f-41b0-8d9d-3c001347fe4f" alt="Test input" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+
+  <p>We have left many of the tools to be 'Human in the loop supervised' to showcase the agentic thought process.</p>
+
+  <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FG2UGVMKiQzxRc4yvytve%2Fimage.png?alt=media&token=45f3093a-1bd5-4f1d-b352-b4050f4cc867" alt="Agent thought process" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+
+  <p>Next, let's move this Agent and its tools to an Agentic workflow!</p>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2.3: WRAP AGENT IN USE CASE -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-2-3">
+  <h2>Section 2.3: Wrap your Agent in a Use Case <a href="#section-2-3" class="anchor-link">#</a></h2>
+
+  <ol class="steps">
+    <li>Click the <strong>Create and Manage</strong> tab.</li>
+    <li>On the <strong>Use Case</strong> tab, click <strong>New</strong>.</li>
+    <li>
+      <p>Click on the <strong>"Generate details"</strong> in the <strong>Define key requirements</strong> page, copy and paste this into the dialog:</p>
+      <div class="prompt-block">This workflow will be the "Incident Solution Agent workflow". This use case provides recommendations to resolve incidents. Provide a recommendation on how to resolve a given incident using an easy-to-follow numbered step-by-step list format.</div>
+    </li>
+    <li>
+      <p>Click on <strong>"Generate."</strong> Scroll down and see how it's filled in the fields for you!</p>
+    </li>
+    <li>
+      <p>Click <strong>Recommend</strong> button, then find the AI Agent you created previously.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FSUN32EDPryW6StiH41q6%2Fimage.png?alt=media&token=8cb8f952-d638-4743-81b8-d07a860a9200" alt="Recommend agent" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click the <strong>"+"</strong> button under <strong>Add AI agent</strong>.</li>
+    <li>
+      <p>You will get prompted for possible duplicates. Click <strong>"Ignore and continue."</strong> In Define user access, click "Save and continue" on the following two steps:</p>
+      <ul class="sub-steps">
+        <li>Select <strong>"Any Authenticated user"</strong> from the User access drop-down</li>
+        <li>Select the <strong>Dynamic user</strong>, search and select <strong>'itil'</strong> and <strong>"admin"</strong> from the approved roles</li>
+      </ul>
+    </li>
+    <li>Next, in the Add triggers section, click <strong>"Save and continue"</strong>.</li>
+    <li>Next, in the <strong>Select channels and status</strong>, you can enable Agents to communicate via the Now Assist for Virtual Agent (via Employee center, or Service Portal), but for this example, we will NOT change the selection.</li>
+    <li>In the Communicate, this AI agent's process to users, click on <strong>"Generate messages"</strong> letting Now Assist create them for you, when the agent is 'thinking' and when it has completed its task.</li>
+    <li>Click <strong>"Save and continue"</strong>.</li>
+    <li>
+      <p>In the <strong>Add Trigger</strong> page, click <strong>Add Trigger</strong>, and fill in the following fields:</p>
+      <ul class="sub-steps">
+        <li><strong>Select Trigger:</strong> Created</li>
+        <li><strong>Trigger name:</strong> "[Your initials] Incident Created" and Objective: "Help me resolve $(number)"</li>
+        <li>Trigger is toggled <strong>'on'</strong></li>
+        <li><strong>Table:</strong> "Incident"</li>
+        <li><strong>Choose</strong> to "Run As User"</li>
+        <li><strong>Conditions:</strong> Active is True AND Assigned to is not empty</li>
+        <li><strong>Sys_user:</strong> "Assigned to [task]"</li>
+        <li><strong>Channel:</strong> "Now Assist panel"</li>
+        <li><strong>Show alert to users:</strong> "no"</li>
+      </ul>
+    </li>
+    <li>Click <strong>Add</strong>.</li>
+    <li>Click <strong>Save and Continue</strong>.</li>
+    <li>On the <strong>Select channel and status page</strong>, make sure the Now Assist Panel Display toggle is set to <strong>On</strong>.</li>
+    <li>Click <strong>Save and Test</strong>.</li>
+  </ol>
+
+  <h3>Now let's test your new workflow!</h3>
+  <p>Let's continue to use the same incident record as we've used previously — INC0010248. In the Task box enter:</p>
+  <div class="prompt-block">Help me resolve INC0010248</div>
+  <p><strong>Click Continue to Test Chat response.</strong></p>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 2.4: OPTIONAL - OUTAGE CHECK AGENT -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-2-4">
+  <h2>Section 2.4 (Optional): Build an AI Agent that Checks Outages in Similar Incidents <a href="#section-2-4" class="anchor-link">#</a></h2>
+
+  <p>First, let's create an outage in incident INC0010248.</p>
+
+  <ol class="steps">
+    <li>Open the incidents table (<strong>All &gt; Incident &gt; All</strong>)</li>
+    <li>Search for <strong>INC0010248</strong> and open it.</li>
+    <li>Scroll down to the bottom of the page, and select the <strong>Outages tab</strong>.</li>
+    <li>
+      <p>Click <strong>New</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F8lIus3D9r1j72pFiUccG%2Foutages.png?alt=media&token=95fc069a-bf92-49ec-8a44-3b497384789f" alt="Outages interface" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>In the <strong>Outage New record page</strong>, select <strong>Degradation</strong> from the Type list, and fill in the <strong>Task number</strong> field with the incident number <strong>"INC0010248"</strong>:</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FNiGOn7rUQlLZkZJVGYaW%2Foutage2.png?alt=media&token=6b627b17-fed4-4f01-9793-3308f3aa33c8" alt="Outage new record page" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click <strong>Submit</strong>.</li>
+    <li>Click the <strong>Update</strong> button to return to the incidents list.</li>
+  </ol>
+
+  <p>Now, we need to switch scope to <strong>"Platform AI Agents and Skills"</strong>.</p>
+
+  <ol class="steps">
+    <li>
+      <p>Click the Application Scope icon at the top of the page.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F2xoNt8kpd0tSFUYGGlPF%2Foutage8.png?alt=media&token=d82e749a-2d4b-4893-8163-430d3ed0f258" alt="Application scope icon" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Select <strong>Application scope</strong>: Global, and then filter for and select <strong>Platform AI Agents and Skills</strong>.
+      <div class="callout note">
+        <span class="callout-label">Note</span>
+        If you can't find the scope "Platform AI Agents and Skills", please click to check <strong>Appendix Section A4: Application Scope</strong> at the end of the document.
+      </div>
+    </li>
+  </ol>
+
+  <p>Now let's go to <strong>Flow Designer</strong> and modify the existing "Get Similar records" action and have it return outages found in similar incidents as well.</p>
+
+  <ol class="steps">
+    <li>Open Flow Designer (<strong>All &gt; Flow Designer</strong>) — this will open Flow Designer in a new tab.</li>
+    <li>
+      <p>Under the Actions tab, find <strong>"Get Similar Records"</strong> and open it. <strong>DO NOT OPEN "Get Similar Incident Records"</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FDNNR2qpEsc2MG1o7mS0o%2Foutag11.png?alt=media&token=a62f79e3-54f5-4662-b334-b6aea9981b11" alt="Get Similar Records action" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Copy the action by clicking on the three dots (...) in the top right of the page.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F958XPiXmKOzpo7eOsUB8%2Fouate12.png?alt=media&token=eca9c05d-b6e1-46a3-ab02-5a8eda3c73de" alt="Three dots menu" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Change the action name to <strong>"[Your initials] Get Similar Records and Outages"</strong> and be sure that <strong>"Platform AI Agents and Skills"</strong> is the Application selected.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F7ejdxBnygHjNvUxrAolG%2Foutage13.png?alt=media&token=e1bc2e9e-cdc5-45ac-90e7-50deb938c3a2" alt="Copy action dialog" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click <strong>Copy</strong>.</li>
+    <li>
+      <p>On the left, click <strong>Script Step</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FUr2GIe2WH9Gi01Y4qXZ8%2Foutage15.png?alt=media&token=186522ba-6341-4d11-8b31-9f4bd71b4575" alt="Script Step option" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Please use the script text box below to copy/paste:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">JavaScript</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>(function execute(inputs, outputs) {
+    var groupSkillId;
+    var action_skill_id;
+    var recSysId = UXCGAFUtil.getSysId(inputs.table, 'number', inputs.record_number);
+
+    // Map the skills based on table
+    var tableMapping = {
+        'incident': { group: UXCConstants.ITSM_GROUPING, action: UXCConstants.ITSM_ACTION_STRATEGY },
+        'sn_customerservice_case': { group: UXCConstants.CSM_GROUPING, action: UXCConstants.CSM_ACTION_STRATEGY },
+        'sn_hr_core_case': { group: UXCConstants.HR_GROUPING, action: UXCConstants.HR_ACTION_STRATEGY }
+    };
+
+    var config = tableMapping[inputs.table];
+    if (config) {
+        groupSkillId = config.group;
+        action_skill_id = config.action;
+    }
+
+    var grpSysId = UXCGAFUtil.getGroupSysId(recSysId, inputs.table, inputs.record_number, groupSkillId);
+    var recs = grpSysId ? UXCGAFUtil.getGAFSimilarRecs(grpSysId, groupSkillId) : UXCGAFUtil.getRecReferences(inputs.table, recSysId);
+
+    outputs.references = JSON.stringify(recs);
+
+    // Extract IDs - Handling potential casing issue (sys_id vs sys_Id)
+    var sysIds = [];
+    if (Array.isArray(recs)) {
+        recs.forEach(function(item) {
+            var id = item.sys_id || item.sys_Id;
+            if (id) sysIds.push(id.toString());
+        });
+    }
+
+    outputs.sys_ids = JSON.stringify(sysIds);
+
+    if (sysIds.length === 0) {
+        outputs.outage_details = "No related records found.";
+        return;
+    }
+
+    // --- Optimized Outage Retrieval ---
+    var reportLines = [];
+    var outageGR = new GlideRecord('cmdb_ci_outage');
+    outageGR.addQuery('task_number', 'IN', sysIds); // Batch query is much faster
+    outageGR.orderBy('task_number');
+    outageGR.query();
+
+    var currentTask = "";
+    while (outageGR.next()) {
+        // Grouping header in the report
+        if (currentTask != outageGR.task_number.getDisplayValue()) {
+            currentTask = outageGR.task_number.getDisplayValue();
+            reportLines.push("\n--- Outages for Task: " + currentTask + " ---");
+        }
+
+        reportLines.push("  ----------------------------------------");
+        reportLines.push("  Outage: " + outageGR.getDisplayValue());
+        reportLines.push("  Begin: " + outageGR.begin.getDisplayValue());
+        reportLines.push("  End: " + outageGR.end.getDisplayValue());
+        reportLines.push("  Description: " + (outageGR.description || "No description"));
+        reportLines.push("  ----------------------------------------");
+    }
+
+    outputs.outage_details = reportLines.length > 0 ? reportLines.join('\n') : "No outages found for these records.";
+
+})(inputs, outputs);</pre>
+      </div>
+    </li>
+    <li>
+      <p>In the Output Variables window (below the Script window), delete both existing variables, and create the following:</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FbhIJ75xf4gKwJv9aLgMJ%2Foutput.png?alt=media&token=a36d843c-2509-4779-89ab-9aff5e0e0b8d" alt="Output variables window" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>On the left, click <strong>Outputs</strong>, then click <strong>Edit Outputs</strong>.</li>
+    <li>Delete the message output (confirm the popup window).</li>
+    <li>Change the label from "References" to <strong>"similar records"</strong>.</li>
+    <li>
+      <p>Click Create Output with the label <strong>"outage details"</strong>, the name <strong>"outage_details"</strong>, and the type <strong>String</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2Fk400wMDyEeGuEEUDPBGp%2Foutag2.png?alt=media&token=4cb8495c-7a65-4300-b5fb-9324016fdc1c" alt="Create output dialog" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click on <strong>Exit Edit Mode</strong>.</li>
+    <li>
+      <p>Drag and drop the script step variables from the right into their corresponding boxes in the middle, like this:</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FOICGjNedaV8mSiLix8qY%2Foutage3.png?alt=media&token=696d34d5-4fef-4ef1-af27-41338621fddf" alt="Variable mapping" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click <strong>Test</strong>.</li>
+    <li>
+      <p>Type <strong>"incident"</strong> into the type field, and <strong>"INC0010004"</strong> into the record_number field, then click <strong>Run Test</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FiMfRQBPUgkCBv7AR9n8T%2Foutage4.png?alt=media&token=664ef733-c3ba-4382-9085-6c83b994dd81" alt="Test action dialog" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>When it appears, click <strong>"Your test has finished running. View the Action execution details."</strong>
+      <p>Your results should look like:</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FTVvBOJobKTycUGWf2c1E%2Foutage5.png?alt=media&token=ef3d23cf-dcf1-4c85-b8b8-9c8a10acd344" alt="Test results" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Return to the previous window, and click <strong>Save</strong>, then <strong>Publish</strong>.</li>
+    <li>Close the Workflow Studio browser tab, and return to the main lab browser tab.</li>
+    <li>
+      <p>Let's change the Application Scope back to Global.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FP25Mg9KNA20Ouq9cnyeG%2Foutage6.png?alt=media&token=c70eb89e-7160-4e52-8fb7-52be99511142" alt="Application scope selector" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+  </ol>
+
+  <p>Now let's create another Flow Action for creating an outage.</p>
+
+  <ol class="steps">
+    <li>
+      <p>Open Flow Designer (<strong>All &gt; Flow Designer</strong>) and search for "outage" under the Actions tab.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FDxsDqumxHNPfkujSozsX%2Foutage7.png?alt=media&token=0ffc619d-cdff-4bee-8810-65af29314251" alt="Outage search results" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Click on <strong>Create Outage</strong> and copy the action, name it <strong>"[Your Initials] Create outage."</strong></p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FfOIRGn0A22t03a2BFysP%2Foutage8a.png?alt=media&token=be178989-150c-4106-9b49-30c3352e9972" alt="Create outage action" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Delete the following inputs:</p>
+      <ul class="sub-steps">
+        <li>"configuration item"</li>
+        <li>"type"</li>
+        <li>"begin"</li>
+      </ul>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F9xWcoKqhLcYedECHCKiT%2Foutage9.png?alt=media&token=53302d45-786f-4b1b-938c-63519a87fb3d" alt="Delete inputs" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>On the left, click <strong>Script Step</strong> and delete the following variables:</p>
+      <ul class="sub-steps">
+        <li>"cmdbCI"</li>
+        <li>"type"</li>
+        <li>"begin"</li>
+      </ul>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2Flm8Enp7XQuoMv4oyFIu5%2Foutage10.png?alt=media&token=8d4f4787-75a9-4499-b15e-d962aece38f7" alt="Delete script variables" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Replace the existing script with this one:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">JavaScript</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>(function execute(inputs, outputs) {
+  var parentTable = GlideDBObjectManager.get().getBase(inputs.source.getRecordClassName());
+  var outage = new GlideRecord("cmdb_ci_outage");
+
+  outage.initialize();
+  //outage.setValue("cmdb_ci", inputs.cmdbCi);
+  outage.setValue("type", "Degradation");
+  //outage.setValue("begin", inputs.begin);
+  outage.setValue("short_description", "degradation");
+  if (parentTable == "task")
+    outage.setValue("task_number", inputs.source.getUniqueValue());
+  outputs.OutageRecord = outage.insert();
+  // Add this line to get the outage number as a string
+  outputs.outagerecordnumber = outage.getValue("number");
+})(inputs, outputs);</pre>
+      </div>
+    </li>
+    <li>
+      <p>Then add an output variable with the following values:</p>
+      <ul class="sub-steps">
+        <li>Label: "OutageRecordNumber"</li>
+        <li>Name: outagerecordnumber</li>
+        <li>Type: String</li>
+        <li>Mandatory: True</li>
+      </ul>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FUnpHxk7jzTOprIm9tL9K%2Foutager35.png?alt=media&token=93940f8b-c00f-40df-b132-c56f41777180" alt="Output variable configuration" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>On the left, click <strong>Outputs</strong>, then <strong>Edit Outputs</strong>, then <strong>Create Output</strong>.</li>
+    <li>
+      <p>Edit the new Output with the following values:</p>
+      <ul class="sub-steps">
+        <li>Label: "Outage Number"</li>
+        <li>Name: "outage_number"</li>
+        <li>Type: String</li>
+      </ul>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2Fy3eXGWo8lXAWQLK0pZq9%2Foutage37.png?alt=media&token=bb835438-55aa-4a19-b505-e19893743501" alt="Edit output dialog" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click <strong>Exit Edit Mode</strong>.</li>
+    <li>
+      <p>Drag the "OutageRecordNumber" Script variable to the Outage Number Action Output box.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FHrMTmAZNA6XLApusvBuW%2Foutage39.png?alt=media&token=05084036-1027-40d0-a5bc-b64ed4f7ee0e" alt="Drag variable mapping" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click <strong>Test</strong>.</li>
+    <li>Select <strong>"INC0000001"</strong> as the Source Record, and click <strong>Run Test</strong>.</li>
+    <li>When it appears, click <strong>"Your test has finished running. View the Action execution details."</strong>
+      <p>Your results should look like:</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FoDjCPanAl6qQDRP59M5d%2Foutage42.png?alt=media&token=1375fdc7-fb86-4583-81a8-e663bf216e50" alt="Test results for create outage" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Return to the previous window, and click <strong>Save</strong>, then <strong>Publish</strong>.</li>
+    <li>Close the Workflow Studio browser tab, and return to the main lab browser tab.</li>
+  </ol>
+
+  <h3>Section 2.4.2 — Extra: Build the AI Agent</h3>
+  <p>Now, let's open AI Agent Studio and build another AI agent. This time, we will duplicate the previously created AI agent "Incident Solution Recommender".</p>
+
+  <ol class="steps">
+    <li>Open AI Agent Studio (<strong>All &gt; AI Agent Studio &gt; Overview</strong>)</li>
+    <li>Click the <strong>Create and Manage</strong> module.</li>
+    <li>Click on the <strong>AI Agent</strong> tab, then click the duplicate button next to the previously created AI agent <strong>"Incident Solution Recommender"</strong>.</li>
+    <li>Click <strong>Duplicate</strong> when prompted.</li>
+    <li>
+      <p>Update the fields with the following values:</p>
+      <ul class="sub-steps">
+        <li>Name: "Incident Solution Recommender with Outage Check"</li>
+        <li>Instructions (include the numbering):</li>
+      </ul>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Agent Instructions</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>1. Get details of an incident.
+2. Get current similar incidents. The table name is "incident".
+3. Using the incident's short description, search the Knowledge Base for relevant articles.
+4. Based on the similar incidents' details, the kb articles returned, and the outages found in similar incidents, add resolution steps, along with any relevant similar incidents, knowledge articles, and outages found in similar incidents, to the Additional Comments section of the incident record. When adding a comment, make sure to include a qualifier that states the comment was added by an AI Agent. Your output message to the user should be formatted to be easy to read with new line characters in a list format. Also provide your reasoning for recommending these steps.
+5. If outages are found in similar incidents, ask the user if they want to create an outage for the current incident being resolved. If no outages exist in similar incidents, do not mention anything back to the user.
+6. If an outage record was created successfully, please add the outage number to the Additional Comments section of the incident record.
+7. End.</pre>
+      </div>
+    </li>
+    <li>Click <strong>Save and continue</strong>.</li>
+    <li>Click on the existing <strong>"Get Similar Incident Records"</strong> flow action and change the name to <strong>"Get Similar Incident Records and Outages"</strong>.</li>
+    <li>
+      <p>Select <strong>"[Your Initials] Get Similar Records and Outages"</strong> as the flow action.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F7rZ29cHEBBBzlJWFiSHK%2Fflow8.png?alt=media&token=b25509ae-82a0-474e-97f6-1c59702552c4" alt="Flow action selection" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click <strong>Save</strong>.</li>
+    <li>
+      <p>Click the Add tool dropdown list, and select Flow action, then complete the fields with the following information:</p>
+      <ul class="sub-steps">
+        <li>Name: "Create Outage"</li>
+        <li>Description: "Create an outage for the task/record being resolved"</li>
+        <li>Flow action: [Your initials] Create Outage</li>
+        <li>Execution mode: Autonomous</li>
+        <li>Display output: Yes</li>
+        <li>Output Transformation strategy: Concise</li>
+      </ul>
+    </li>
+    <li>
+      <p>Click <strong>Add</strong> — Your tools should look like this:</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FihGLnQGpzB4ZnOuJVGq8%2Fflow11.png?alt=media&token=ff601ae1-db5c-4330-8fa7-7a6f76a7e647" alt="Tools configuration" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Click <strong>Save and Continue</strong>.</li>
+    <li>On the Define Availability page, make sure the Status toggle is set to <strong>On</strong>.</li>
+    <li>Click <strong>Save and Test</strong>.</li>
+  </ol>
+
+  <h3>Now let's test the agent!</h3>
+  <ul class="bullet-list">
+    <li>In the Task box enter <strong>"INC0010004"</strong> and click Start test.</li>
+    <li>At the end of the test, check the comments in INC0010004:</li>
+  </ul>
+  <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FrzKGN37rBkKJpHEHrXPJ%2Ftest1.png?alt=media&token=5babe8ab-75c7-451f-861e-7b1b18a62b5f" alt="Test completion verification" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+
+  <div class="callout tip">
+    <span class="callout-label">Congratulations</span>
+    You have completed the advanced part of the lab!
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3: AGENT PERSONA (INTRO) -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-3-intro">
+  <h2>Section 3: Now Assist for the Agent Persona <a href="#section-3-intro" class="anchor-link">#</a></h2>
+
+  <p><strong>Estimated time: 10 minutes</strong></p>
+  <p>This section covers Now Assist capabilities for the agent persona, including:</p>
+  <ul class="bullet-list">
+    <li>Summarize Incidents and Change Requests</li>
+    <li>Generate Incident resolution notes</li>
+    <li>Generate Knowledge articles</li>
+    <li>Use Agents via the Now Assist Panel</li>
+    <li>Analyze monitoring alerts</li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3.1: INCIDENT SUMMARIZATION -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-3-1">
+  <h2>Section 3.1: Incident Summarization <a href="#section-3-1" class="anchor-link">#</a></h2>
+
+  <p>This section guides you through ServiceNow's incident summarization feature using generative AI capabilities within the Service Operations Workspace.</p>
+
+  <ol class="steps">
+    <li>
+      <p><strong>Return to Lab Instance</strong><br>Navigate back to your lab instance by clicking the ServiceNow logo in the upper-left corner, or remove any portal suffix from your instance URL.</p>
+    </li>
+    <li>
+      <p><strong>Access Service Operations Workspace</strong></p>
+      <ul class="sub-steps">
+        <li>Select the Workspace tab</li>
+        <li>Choose <strong>Service Operations Workspace</strong>, which offers a consolidated view for managing task records including incidents, requests, and walk-ups</li>
+      </ul>
+    </li>
+    <li>
+      <p><strong>Locate Incidents</strong></p>
+      <ul class="sub-steps">
+        <li>Select list view</li>
+        <li>Under incidents, select <strong>All</strong> to display the complete incident list</li>
+      </ul>
+    </li>
+    <li><p><strong>Activate AI Filter</strong><br>Click the Filter button featuring the Gen AI Sparkle icon in the upper-left area of the list view.</p></li>
+    <li>
+      <p><strong>Create Natural Language Filter</strong></p>
+      <ul class="sub-steps">
+        <li>Copy this search criteria: <strong>"Any incident that has a description that contains Versioning errors"</strong></li>
+        <li>Watch as Now Assist automatically constructs the filter</li>
+        <li>Select <strong>Apply</strong> to execute the query</li>
+      </ul>
+    </li>
+    <li><p><strong>Open Incident</strong><br>Click the incident number link to open it within the Service Operations workspace. (Note: Your incident number may differ from examples shown)</p></li>
+    <li>
+      <p><strong>Generate Summary</strong><br>Select the <strong>Summarize</strong> button to leverage generative AI for incident analysis.</p>
+      <p>The summarization feature examines short descriptions, full descriptions, work notes, and related records to produce summaries covering the issue, SLAs, impacted services, and completed actions. This proves valuable when dense documentation would otherwise require extensive reading time.</p>
+    </li>
+    <li>
+      <p><strong>Review Summary Actions</strong><br>The generated summary includes interactive elements:</p>
+      <ul class="sub-steps">
+        <li>Thumbs up/down icons for feedback and model training (if data sharing is enabled)</li>
+        <li>Copy functionality for clipboard access</li>
+        <li>Regenerate option for alternative summaries</li>
+      </ul>
+    </li>
+    <li><p><strong>Share Summary</strong><br>Select the <strong>Share</strong> button to prepare the summary for integration into work notes.</p></li>
+    <li>
+      <p><strong>Edit and Save</strong></p>
+      <ul class="sub-steps">
+        <li>Modify the summary by adding bulleted items as needed</li>
+        <li>Select <strong>Save to work notes</strong> to persist your edits</li>
+      </ul>
+      <div class="callout note">
+        <span class="callout-label">Note</span>
+        Edited responses contribute to model refinement when data sharing is enabled.
+      </div>
+    </li>
+    <li><p><strong>Verify Changes</strong><br>Expand the work note activity stream to confirm your edited summary was successfully added.</p></li>
+  </ol>
+
+  <h3>Bonus Activity</h3>
+  <p>Return to the Incident list and practice the summarization feature with any in-progress incident multiple times to familiarize yourself with the functionality.</p>
+
+  <div class="callout tip">
+    <span class="callout-label">Congratulations</span>
+    You've successfully created and posted an incident summary. Keep the Service Operations workspace and incident tab open for use in subsequent sections.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3.2: RESOLUTION NOTE GENERATION -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-3-2">
+  <h2>Section 3.2: Resolution Note Generation <a href="#section-3-2" class="anchor-link">#</a></h2>
+
+  <p>This section guides users through generating and saving resolution notes for incidents using the Service Operations Workspace.</p>
+
+  <ol class="steps">
+    <li><p><strong>Access the Incident</strong><br>Return to the incident from Section 3.1 that has "Versioning…" in its short description.</p></li>
+    <li><p><strong>Locate the Resolve Button</strong><br>In the upper-right corner of the incident, find and click the <strong>Resolve button</strong> on the right side to initiate resolution note generation.</p></li>
+    <li><p><strong>Select Resolution Code</strong><br>When the Resolve pop-up window appears, the system will review work notes and generate a potential resolution. From the dropdown menu, choose <strong>Solution provided</strong> as your resolution code.</p></li>
+    <li><p><strong>Save the Resolution</strong><br>Click the <strong>"Resolve"</strong> button to save the selection to the ticket.</p></li>
+    <li>
+      <p><strong>Verify Changes</strong><br>Navigate to the Details tab of the incident to confirm:</p>
+      <ul class="sub-steps">
+        <li>The resolution was populated in the Resolution notes field</li>
+        <li>The ticket state changed from New to Resolved</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h3>Bonus Challenge</h3>
+  <p>Return to the Incident list and attempt resolving any in-progress incident using an alternative method. "Look for the sparkles" to discover another resolution note generation approach.</p>
+
+  <div class="callout note">
+    <span class="callout-label">Note</span>
+    Do not close your browser or incident tab, as it will be needed for the next section. The task is complete once resolution notes have been successfully generated and the incident state has been updated.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3.3: KNOWLEDGE CREATION -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-3-3">
+  <h2>Section 3.3: Knowledge Creation <a href="#section-3-3" class="anchor-link">#</a></h2>
+
+  <p>This section guides users through creating a knowledge article from a resolved incident in ServiceNow.</p>
+
+  <ol class="steps">
+    <li><p><strong>Initiate Knowledge Creation</strong><br>Located in the upper right corner of an incident record, access the dropdown menu and select <strong>"Create Knowledge."</strong></p></li>
+    <li>
+      <p><strong>Configure Article Settings</strong><br>Once a related record is established, the Create New Article template appears. Users should:</p>
+      <ul class="sub-steps">
+        <li>Select <strong>"IT"</strong> from the Knowledge Base options</li>
+        <li>Choose <strong>"Standard"</strong> as the article template</li>
+        <li>Click <strong>"Next"</strong> to proceed</li>
+      </ul>
+    </li>
+    <li><p><strong>AI-Assisted Drafting</strong><br>A popup window offers AI-generated content options. Click <strong>"Yes, draft with Now Assist"</strong> to leverage artificial intelligence in article creation.</p></li>
+    <li><p><strong>Review and Validation</strong><br>The generated article body appears for review. Assess how accurately the AI-drafted content reflects the incident details.</p></li>
+  </ol>
+
+  <div class="callout note">
+    <span class="callout-label">Note</span>
+    <strong>Availability Requirement:</strong> The generation feature is restricted to incidents marked as "Resolved" or "Closed." These filters can be customized to align with organizational workflows.
+    <br><br>
+    <strong>Next Steps:</strong> Retain your browser session and workspace, as subsequent sections build upon this foundation.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3.4: CHANGE SUMMARIZATION -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-3-4">
+  <h2>Section 3.4: Change Summarization <a href="#section-3-4" class="anchor-link">#</a></h2>
+
+  <ol class="steps">
+    <li><p><strong>Access the Changes List</strong><br>Navigate to list view and scroll to the "Changes" section. Click <strong>"Open"</strong> to display all open Change Records.</p></li>
+    <li><p><strong>Locate the Specific Change</strong><br>Find and select <strong>"CHG0044021"</strong> from the available open changes list.</p></li>
+    <li><p><strong>Generate the Summary</strong><br>On the Overview tab, click the <strong>"Summarize"</strong> button to view the Change Request summary.</p></li>
+  </ol>
+
+  <div class="callout note">
+    <span class="callout-label">Note</span>
+    Please don't close your browser or the workspace; we'll continue exploring it in the next section.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 3.5: CI FOR CHANGE REQUEST -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-3-5">
+  <h2>Section 3.5: Call 'CI for Change Request' Agent <a href="#section-3-5" class="anchor-link">#</a></h2>
+
+  <ol class="steps">
+    <li><p><strong>Open Now Assist Panel</strong><br>Locate and click the sparkle icon for the Now Assist panel positioned in the top right corner of your change request form.</p></li>
+    <li><p><strong>View Available Skills and Agents</strong><br>The panel will display all the Skills and Agents available based on your user permissions.</p></li>
+    <li><p><strong>Select the Configuration Items Agent</strong><br>Click on the card labeled <strong>"Suggest Configuration Items for a change request."</strong></p></li>
+  </ol>
+
+  <h3>How the Agent Works</h3>
+  <p>The agent functionality searches your CMDB (Configuration Management Database) to identify which configuration items might be affected by the proposed change. You have the flexibility to select one or multiple CIs to attach to your change request record.</p>
+
+  <div class="callout tip">
+    <span class="callout-label">Congratulations</span>
+    Upon finishing these steps, you will have successfully:
+    <ul class="bullet-list" style="margin-top:0.5rem; margin-bottom:0;">
+      <li>Summarized the change request details</li>
+      <li>Identified impacted CIs through the Now Assist agent</li>
+      <li>Completed the workflow for the Agent persona</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- SECTION 6: DEVELOPER PERSONA (INTRO) -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-4-intro">
+  <h2>Section 4: Now Assist for the Developer Persona <a href="#section-4-intro" class="anchor-link">#</a></h2>
+
+  <p>This section contains three subsections:</p>
+  <ol class="steps">
+    <li><strong>Section 4.1</strong> — Flow Generation (with image)</li>
+    <li><strong>Section 4.2</strong> — Flow Generation (with text)</li>
+    <li><strong>Section 4.3</strong> — Code Generation — "Let's turn text into helpful code quickly"</li>
+  </ol>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 6.1: FLOW FROM IMAGE -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-4-1">
+  <h2>Section 4.1: Flow Generation with Image <a href="#section-4-1" class="anchor-link">#</a></h2>
+
+  <p>Everyone in the room has probably drawn a brilliant flow on a whiteboard and then had to figure out how to get this into ServiceNow.</p>
+
+  <ol class="steps">
+    <li>
+      <p><strong>Open Workflow Studio</strong> (<strong>All &gt; Process Automation &gt; Workflow Studio</strong>). "The ServiceNow platform uses workflows to orchestrate process steps and integrate them into systems; Flow Designer is used to build out those workflows."</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FIFuI8QHDnqyKzmaqvd2v%2Fwfstud1.png?alt=media&token=ea1f057f-94bd-4328-883f-a7ba581896ea" alt="Workflow Studio interface" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Flow Designer will open in a new tab. On the far right, click the <strong>"New"</strong> button. From the dropdown menu, select <strong>"Flow"</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FaAm1JiIGmcmqiKHW9rCC%2Fflow.png?alt=media&token=ed3a5d24-489a-4fea-9931-49a09aeda588" alt="Flow Designer new flow selection" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Let's try this from an image of a flow drawn on a whiteboard. <strong>Save this jpeg to your desktop:</strong></p>
+      <p><a href="https://solutions.servicenow.com/i/PlxdqKKt7RoQGtlAkDV0OTGwHL3Acd8uxesibYPDzSwzll44AEKx3dsqkh3TnU0FVX9UbbF2KWtJ44h9ihWzKXLui___lIcoZPLUSSIGNXG5AGnHbIJVsGnU5kDjZc6hrSoQgQy3H" target="_blank">Download flow image</a></p>
+    </li>
+    <li>
+      <p>Enter a Flow name in the 'Attach an Image' section, select the file you just downloaded, then click <strong>"Generate flow preview"</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FxD8uZBba52gQKN5vjKFV%2Fimagefor%20build.png?alt=media&token=dcc6bb47-ff3d-43e8-9a73-6fcbeb7b655e" alt="Image upload and generation interface" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Take a closer look at the resultant flow! "You have a huge jumpstart on the playbook development with help from Now Assist for Creator." When you are finished, <strong>click Discard playbook</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FLt2MnWHmDaiwZCKTMkhB%2Fdiscard.png?alt=media&token=148e9376-3ac1-417a-a3c2-9162ce6b5e3e" alt="Discard playbook option" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+  </ol>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 6.2: FLOW FROM TEXT -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-4-2">
+  <h2>Section 4.2: Flow Generation with Text <a href="#section-4-2" class="anchor-link">#</a></h2>
+
+  <p>Now let's create a flow with an equally brilliant written prompt.</p>
+
+  <ol class="steps">
+    <li>
+      <p>You should be back in the Workflow Studio tab. This time, select <strong>New &gt; Flow.</strong></p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FaAm1JiIGmcmqiKHW9rCC%2Fflow.png?alt=media&token=ed3a5d24-489a-4fea-9931-49a09aeda588" alt="Flow creation interface" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>Copy and paste this into the "Now Assist Directions", give the flow a name, and hit <strong>Generate flow preview</strong>:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">Flow Prompt</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>Brand new process in place for next week
+Step 1 - Pre-Intake (GCR-Creative)
+Review the upcoming GCR roadmap to identify expected creative needs.
+- Create placeholder projects for resource and skill forecasting.
+Step 2 - Project Intake (Requestors)
+- Creative requests submitted via the Parent GCR intake system (Jira).
+- Each Jira ticket generates a linked Jira Child ticket for GCR Creative's workflow.
+Step 3 - Resource Review (Creative Leads)
+- Weekly review of capacity and assign resources by skill, role, and availability.
+Step 4 - Project Kick-Off (Creative Leads &amp; Team Members)
+- Finalize the creative brief, set milestones, confirm deliverables, and assign ownership.
+Step 5 - Concept &amp; Create (Creative Team Members)
+- Execute tasks in alignment with the agreed timelines and quality standards.
+Step 6 - Review &amp; Delivery (Creative Leads)
+- Review, approve, and deliver assets.
+Step 7 - Reporting &amp; Finance Tracking (Creative Leads, Managers &amp; Finance/Operations)
+- Capture time spent, cost, and resource utilization data.
+Link spend to specific initiatives, reconcile with finance systems, and update stakeholder</pre>
+      </div>
+    </li>
+    <li>
+      <p>Review the proposed flow. Does it follow the directions laid out by the Now Assist prompt?</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FyA5h1ZSBcecctdymSVTG%2Fbuild3.png?alt=media&token=9c99170a-226e-44c8-a50f-77afeb8424c1" alt="Flow preview example" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>
+      <p>When you are finished, click <strong>Discard flow.</strong></p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FLZl3dNKIy0mWjMmrAt1G%2Ffintext.png?alt=media&token=def22a14-6c05-4a4d-831e-1313d98a6907" alt="Discard flow option" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Finally, <strong>close the Workflow Studio tab.</strong></li>
+  </ol>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 6.3: CODE GENERATION -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-4-3">
+  <h2>Section 4.3: Code Generation <a href="#section-4-3" class="anchor-link">#</a></h2>
+
+  <ol class="steps">
+    <li>
+      <p>Go to <strong>All &gt; System Definition &gt; Script Includes.</strong> A script is a reusable server-side script that provides logic to define a function or class.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F5pfnzdtbXqs3kSeo5zOS%2Fscript%20menu.png?alt=media&token=6548502f-a8e2-4221-979e-15af8e8355ca" alt="Script menu screenshot" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>Select <strong>New</strong> in the upper right-hand corner.</li>
+    <li>Close any popups that appear, then give the Script Include a Name (e.g., <strong>[Your initials] Test Script</strong>) and a Description of <strong>"My first test script"</strong>.</li>
+    <li>
+      <p>Replace the default code with the following:</p>
+      <div class="code-block">
+        <div class="code-block-header">
+          <span class="code-block-label">JavaScript</span>
+          <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        </div>
+        <pre>//predict assignment group using predictive intelligence classification model</pre>
+      </div>
+    </li>
+    <li>
+      <p>Now, <strong>hit CMD + Return (Mac) or CTRL + ENTER (Windows)</strong>.</p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FeYnmDvXUtoZ2y9KTc5Jx%2Fcode%20gen%20pick.png?alt=media&token=9c974161-7369-4428-a2c3-d74be7222990" alt="Code generation picker screenshot" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+      <p>This feature allows you to use Now Assist to write a custom script based on your instructions.</p>
+    </li>
+    <li>When you are finished, click <strong>Submit</strong>.</li>
+  </ol>
+
+  <div class="callout tip">
+    <span class="callout-label">Congratulations</span>
+    You have completed the Now Assist for the Developer persona portion of the lab!
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- SECTION 7: SKILL KIT (OPTIONAL) -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="section-7">
+  <h2>Section 7: Now Assist Skill Kit (Optional) <a href="#section-7" class="anchor-link">#</a></h2>
+
+  <p>Access the community site below to learn about NASK capabilities:</p>
+
+  <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FlyXcB1pc75PiXgM2JJvF%2FNAKS.png?alt=media&token=dba59bb5-13a3-407e-90a1-080489623636" alt="NAKS" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+
+  <p>Explore practical applications by visiting this resource:</p>
+  <p><a href="https://www.servicenow.com/community/now-assist-articles/now-assist-skill-kit-use-case-library/ta-p/3053580" target="_blank">ServiceNow Community Article: Now Assist Skill Kit Use Case Library</a></p>
+
+  <div class="callout tip">
+    <span class="callout-label">Congratulations</span>
+    You have completed the lab!
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- APPENDIX -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="appendix">
+  <h2>Appendix <a href="#appendix" class="anchor-link">#</a></h2>
+
+  <p>The appendix contains four supplementary reference sections:</p>
+  <ol class="steps">
+    <li><strong>Section A1: Now Creator Sample Prompts</strong> — Example prompts for the Now Creator tool</li>
+    <li><strong>Section A2: Agent Ideas</strong> — Conceptual guidance on agent implementation</li>
+    <li><strong>Section A3: AI Search Set-Up</strong> — Configuration procedures for AI search functionality</li>
+    <li><strong>Section A4: Application Scope</strong> — Application scope guidance</li>
+  </ol>
+</section>
+
+<!-- ============================================================ -->
+<!-- APPENDIX A1: SAMPLE PROMPTS -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="appendix-a1">
+  <h2>Appendix A1: Now Creator Sample Prompts <a href="#appendix-a1" class="anchor-link">#</a></h2>
+
+  <h3>Text to Flow Examples</h3>
+  <ul class="bullet-list">
+    <li>"Anytime an incident record is created. Wait 1 minute. If the incident priority equals high, then send a Teams message."</li>
+    <li>When a change request is created or updated with an unauthorized demo model, the system applies approval policies and sends notifications based on approval status.</li>
+    <li>"When an expense claim is submitted, email the user that the claim has been received."</li>
+  </ul>
+
+  <h3>Text To Code Examples</h3>
+  <p>The section includes code snippet examples for various tasks:</p>
+  <ul class="bullet-list">
+    <li><strong>Temperature conversion:</strong> a function converting Celsius to Fahrenheit</li>
+    <li><strong>Email validation:</strong> checking that email variables meet proper syntax requirements</li>
+    <li><strong>Query operations:</strong> retrieving critical incidents from the past six months</li>
+    <li><strong>Database searches:</strong> finding the latest incident record created within the current quarter by the active user</li>
+    <li><strong>Domain verification:</strong> "If email is provided, ensure it is from my domain"</li>
+    <li><strong>VIP incident retrieval:</strong> accessing active incidents assigned to VIP callers</li>
+    <li><strong>SLA monitoring:</strong> generating alerts "If 90 percent of the SLA has been consumed"</li>
+    <li><strong>Aggregation queries:</strong> counting closed priority-1 incidents within specified date ranges</li>
+  </ul>
+
+  <h3>Context-Specific Examples</h3>
+  <ul class="bullet-list">
+    <li><strong>Email scripts</strong> demonstrate querying for open incidents.</li>
+    <li><strong>Fix scripts</strong> show record queries for locked-out users.</li>
+    <li><strong>Script include examples</strong> illustrate regex functions for identifying and masking sensitive information patterns in text.</li>
+  </ul>
+</section>
+
+<!-- ============================================================ -->
+<!-- APPENDIX A2: AGENT IDEAS -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="appendix-a2">
+  <h2>Appendix A2: Agent Ideas <a href="#appendix-a2" class="anchor-link">#</a></h2>
+
+  <h3>Children's Hospital Entertainment Concierge</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Aspect</th><th>Details</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Name</strong></td><td>Children's Hospital Entertainment Concierge</td></tr>
+        <tr><td><strong>Description</strong></td><td>The purpose of this agent is to inform patients of the entertainment options available at the hospital.</td></tr>
+        <tr><td><strong>AI Agent Role</strong></td><td>The agent should be talkative, cheerful, enthusiastic, and friendly while curating entertainment for hospitalized children.</td></tr>
+        <tr><td><strong>Instructions</strong></td><td>The agent follows a four-step process: (1) greet patients and inquire about interest in daily activities; (2) if disinterested, respond with "I'm always here if you need me!" and conclude; (3) if interested, ask about arts and crafts, story time, checkers tournament, puppy patrol visits, and Captain Underpants movie; (4) provide activity times and locations upon request.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Hospital Visitor Badging Agent</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Aspect</th><th>Details</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Name</strong></td><td>Hospital Visitor Badging Agent</td></tr>
+        <tr><td><strong>Description</strong></td><td>This agent facilitates the visitor badging process within a healthcare facility.</td></tr>
+        <tr><td><strong>AI Agent Role</strong></td><td>Operating as a courteous, friendly, and thorough front desk worker responsible for greeting and screening visitors to ensure only approved individuals receive badges.</td></tr>
+        <tr><td><strong>Instructions</strong></td><td>A seven-step screening process: (1) greet visitor and ask whom they're visiting; (2) verify patient acceptance and approved status; (3) confirm visitor hours align with current time; (4) conduct health screening regarding COVID/influenza exposure, fever, and gastrointestinal symptoms; (5) scan government-issued identification; (6) perform background check; (7) print badge and direct visitor to ServiceNow mobile app.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- APPENDIX A3: AI SEARCH SETUP -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="appendix-a3">
+  <h2>Appendix A3: AI Search Set-Up <a href="#appendix-a3" class="anchor-link">#</a></h2>
+
+  <p>In this section, we will run a quick fix to ensure AI Search is running on your lab instance.</p>
+
+  <ol class="steps">
+    <li>Log out of your lab instance.</li>
+    <li>You can open a new private or incognito browser tab.</li>
+    <li>In your browser, edit the URL to remove the <code>/external_logout.do</code>. You will be presented with a fresh login page.</li>
+    <li>
+      <p>Log into your instance again, this time with the following credentials:</p>
+      <ul class="sub-steps">
+        <li><strong>User:</strong> aislab.admin</li>
+        <li><strong>Password:</strong> aislab.admin</li>
+      </ul>
+    </li>
+    <li>
+      <p>Navigate to <strong>All &gt; Repair Machine Learning Settings Tool.</strong></p>
+      <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FOfzDjUqBWWZz9vut7Dux%2Frepoar.png?alt=media&token=1d5c14a2-6be0-4350-adf2-4c40c2759889" alt="Repair Machine Learning Settings Tool" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+    </li>
+    <li>In the pane on the right, you will see "Repair/Reset Machine Learning Settings". Click <strong>"Reset"</strong>.</li>
+    <li>After a few minutes, your instance will be ready to go.</li>
+    <li>Use your magic link to log in again as admin.</li>
+    <li>To return to the beginning of the lab, click to go back to <a href="#lab-prep">Lab Configuration</a> at the top of this guide.</li>
+  </ol>
+</section>
+
+<!-- ============================================================ -->
+<!-- APPENDIX A4: APPLICATION SCOPE -->
+<!-- ============================================================ -->
+<div class="section-divider"></div>
+<section class="section" id="appendix-a4">
+  <h2>Appendix A4: Application Scope <a href="#appendix-a4" class="anchor-link">#</a></h2>
+
+  <p>If you couldn't find the "Platform AI Agents and Skills" application scope, then please look for <strong>"UXC Generative AI"</strong> and create your script under it.</p>
+
+  <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FcbVFUz8XSq5Z6RS59MZc%2Fuxc.png?alt=media&token=62d21b0c-396b-4c87-911e-1d42075be34a" alt="UXC Application Scope" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+
+  <p>And the action you are copying would be:</p>
+
+  <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2FxF5xpuXdqafRMVpR8mV4%2Fxrion.png?alt=media&token=12087eb8-1bb9-4ebb-b310-158ac2882ebc" alt="XRION Action Example" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+
+  <img src="https://4104961897-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FDllbrTVbjzMeBclO7Dxo%2Fuploads%2F7E215AWoBvttseYQvQ8z%2FewRW.png?alt=media&token=5b0cef06-a211-4359-92aa-ffd0ed1600ff" alt="Additional Reference Image" style="max-width:100%; border-radius:10px; margin:0.75rem 0; border:1px solid rgba(99,223,78,0.1);">
+</section>
+
+<div class="section-divider"></div>
+<p style="text-align:center; color:#8A95A5; font-size:0.82rem; padding:2rem 0 1rem;">
+  <em>End of Now Assist &amp; AI Agents Lab Guide &mdash; Zurich Release</em>
+</p>
+
+</main>
+</div>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&#8593;</button>
+
+<script>
+// Back to top visibility
+const btn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  btn.classList.toggle('visible', window.scrollY > 400);
+});
+
+// Copy button
+function copyCode(button) {
+  const pre = button.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent).then(() => {
+    const orig = button.textContent;
+    button.textContent = 'Copied!';
+    setTimeout(() => button.textContent = orig, 1800);
+  });
+}
+
+// Active TOC link on scroll
+const sections = document.querySelectorAll('.section[id]');
+const tocLinks = document.querySelectorAll('.toc-list a');
+
+function updateActiveToc() {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  tocLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+}
+window.addEventListener('scroll', updateActiveToc);
+updateActiveToc();
+
+// Close sidebar on mobile when clicking a link
+tocLinks.forEach(a => {
+  a.addEventListener('click', () => {
+    if (window.innerWidth <= 900) {
+      document.querySelector('.sidebar').classList.remove('open');
+    }
+  });
+});
+</script>
+</body>
+</html>
