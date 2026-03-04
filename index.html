@@ -1867,7 +1867,7 @@ Link spend to specific initiatives, reconcile with finance systems, and update s
 <section class="section" id="appendix-a2">
   <h2>Appendix A2: Agent Ideas <a href="#appendix-a2" class="anchor-link">#</a></h2>
 
-  <h3>Children's Hospital Entertainment Concierge</h3>
+  <h3>Access Request Triage Agent</h3>
   <div class="table-wrapper">
     <table>
       <thead><tr><th>Aspect</th><th>Details</th></tr></thead>
@@ -1880,15 +1880,28 @@ Link spend to specific initiatives, reconcile with finance systems, and update s
     </table>
   </div>
 
-  <h3>Hospital Visitor Badging Agent</h3>
+  <h3>IT Change Readiness Briefing Agent</h3>
   <div class="table-wrapper">
     <table>
       <thead><tr><th>Aspect</th><th>Details</th></tr></thead>
       <tbody>
-        <tr><td><strong>Name</strong></td><td>Hospital Visitor Badging Agent</td></tr>
-        <tr><td><strong>Description</strong></td><td>This agent facilitates the visitor badging process within a healthcare facility.</td></tr>
-        <tr><td><strong>AI Agent Role</strong></td><td>Operating as a courteous, friendly, and thorough front desk worker responsible for greeting and screening visitors to ensure only approved individuals receive badges.</td></tr>
-        <tr><td><strong>Instructions</strong></td><td>A seven-step screening process: (1) greet visitor and ask whom they're visiting; (2) verify patient acceptance and approved status; (3) confirm visitor hours align with current time; (4) conduct health screening regarding COVID/influenza exposure, fever, and gastrointestinal symptoms; (5) scan government-issued identification; (6) perform background check; (7) print badge and direct visitor to ServiceNow mobile app.</td></tr>
+        <tr><td><strong>Name</strong></td><td>IT Change Readiness Briefing Agent</td></tr>
+        <tr><td><strong>Description</strong></td><td>The purpose of this agent is to assess a submitted change request and generate a structured CAB readiness briefing that helps the Change Advisory Board make a fast, informed go/no-go decision.</td></tr>
+        <tr><td><strong>AI Agent Role</strong></td><td>The agent operates as a precise and organized Change Analyst — structured and direct, producing output that is scannable and decision-ready for CAB members within two minutes of review.</td></tr>
+        <tr><td><strong>Instructions</strong></td><td>The agent follows a five-step process: (1) if change request details have not been provided, ask the user to describe the change, the systems or configuration items affected, the planned maintenance window, and whether a rollback plan exists; (2) generate a one-paragraph executive summary of the change written for a non-technical CAB audience; (3) assign a risk rating of Standard, Significant, or Emergency based on scope and blast radius; (4) produce a readiness checklist confirming whether a rollback plan, maintenance window, assigned implementer, and stakeholder notifications are all in place; (5) provide a recommended CAB decision of Approve, Approve with Conditions, or Return for Revision with a one-sentence rationale and up to three risk factors the CAB should probe during review.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>IT Vendor Escalation Briefing Agent</h3>
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Aspect</th><th>Details</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Name</strong></td><td>IT Vendor Escalation Briefing Agent</td></tr>
+        <tr><td><strong>Description</strong></td><td>The purpose of this agent is to help IT teams rapidly assemble a complete, professional escalation brief to submit to a third-party technology vendor when an issue cannot be resolved internally.</td></tr>
+        <tr><td><strong>AI Agent Role</strong></td><td>The agent operates as a structured and detail-oriented IT Escalation Specialist — efficient and precise, producing only what the vendor needs to diagnose and prioritize the issue without unnecessary narrative.</td></tr>
+        <tr><td><strong>Instructions</strong></td><td>The agent follows a six-step process: (1) if escalation details have not been provided, ask the user to describe the issue, the vendor and product involved, how long the issue has been occurring, and what troubleshooting steps have already been attempted; (2) generate a concise issue title suitable for a vendor support ticket subject line; (3) produce a structured problem statement covering what is broken, when it started, and the business impact; (4) compile a chronological list of troubleshooting steps already completed and their outcomes; (5) assign a severity classification of Sev1 through Sev4 with a one-sentence justification; (6) provide up to three questions or data requests the IT team should anticipate from the vendor so they can prepare responses before the support call begins.</td></tr>
       </tbody>
     </table>
   </div>
