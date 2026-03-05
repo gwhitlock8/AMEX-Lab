@@ -33,6 +33,37 @@
       padding: 36px 28px 72px;
     }
 
+    /* ─── TOP NAV ────────────────────────────────────── */
+    .top-nav {
+      display: flex;
+      justify-content: flex-start;
+      max-width: 1120px;
+      margin: 0 auto 20px;
+    }
+    .top-nav a.nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 100px;
+      padding: 8px 20px 8px 14px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .top-nav a.nav-btn:hover {
+      border-color: var(--green);
+      background: rgba(129,181,50,0.08);
+    }
+    .top-nav a.nav-btn .nav-arrow {
+      font-size: 16px;
+      line-height: 1;
+    }
+
     /* ─── HEADER ──────────────────────────────────────── */
     .header {
       text-align: center;
@@ -388,16 +419,17 @@
 </head>
 <body>
 
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <a href="index.html" class="nav-btn"><span class="nav-arrow">←</span> Lab Guide</a>
+  </div>
+
   <!-- HEADER -->
   <div class="header">
     <div class="header-eyebrow">
       <div class="sn-logo">SN</div>
       <span>ServiceNow AI Platform</span>
     </div>
-    <div class="header-eyebrow">
-      <span><a href="index.html">Lab Guide</a></span>
-    </div>
-    
     <h1>Now Assist Product Hierarchy</h1>
     <p>Three layers: the infrastructure that runs it, the tools that build it, and the products that deliver it.</p>
   </div>
